@@ -14,7 +14,7 @@ from selenium.webdriver.common.actions import interaction
 from selenium.webdriver.common.actions.action_builder import ActionBuilder
 from selenium.webdriver.common.actions.pointer_input import PointerInput
 import base64
-
+import cv2
 
 caps = {}
 caps["appium:udid"] = "5do7bu95ukkfaqbi"
@@ -69,6 +69,11 @@ def choose_game():
     print("choosing game")
     time.sleep(2)
 
+def crop_image(image):
+    image = cv2.imread(image)
+    croped_image = image[315:1294, 145:950]
+    return cv2.imwrite("croped.jpg", cropped_image)
+    
 
 def map_keyboard(key):
     x,y = keyboard[key].split(",")
@@ -84,16 +89,21 @@ def send_keys(word):
     time.sleep(1)
     TouchAction(driver).tap(x=525, y=1929).perform()
 
-def get_screen_shot():
+def take_screenshot():
     time.sleep(5)
     screenshotBase64 = driver.get_screenshot_as_base64()
-    print(screenshotBase64)
     with open("im.png", "wb") as im:
         im.write(base64.b64decode((screenshotBase64)))
+    print("screenshot taken")
 
 choose_game()
 time.sleep(10)
 send_keys("ABOUT")
-get_screen_shot()
+take_screenshot()
 
 
+#TODO
+# pull words from images 
+# find words in world dictionary
+# fill 
+# repeat
